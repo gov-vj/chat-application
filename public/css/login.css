@@ -1,0 +1,31 @@
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 10px 10px;
+  align-items: center;
+}
+
+main {
+  display: grid;
+  height: 100vh;
+  align-content: center;
+}
+
+.justify-self-start {
+  justify-self: start;
+}
+
+.justify-self-end {
+  justify-self: end;
+}
+
+.hide-error {
+  display: none;
+}
+
+.error {
+  color: red;
+  grid-column-start: span 2;
+  justify-self: center;
+}

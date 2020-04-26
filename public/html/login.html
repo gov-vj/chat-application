@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="/static/css/login.css">
+  <script async src="/static/js/login.js"></script>
+</head>
+<body>
+  <main>
+    <form>
+      <label class="justify-self-end" for="username">User Name:</label>
+      <input class="justify-self-start" type="text" name="username" id="username"/>
+      <label class="justify-self-end" for="password">Password:</label>
+      <input class="justify-self-start" type="password" name="password" id="password"/>
+      <input id="login" class="justify-self-end" type="button" value="Login"/>
+      <input id="register" class="justify-self-start" type="button" value="Register"/>
+      <p class="error invalid-error hide-error">Invalid User name and/or password.</p>
+      <p class="error empty-user hide-error">Empty user name.</p>
+      <p class="error empty-password hide-error">Empty password.</p>
+      <p class="error user-exists hide-error">User already exists.</p>
+    </form>
+  </main>
+</body>
+</html>
