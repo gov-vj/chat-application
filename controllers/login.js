@@ -14,6 +14,7 @@ exports.authenticateUser = (req, res, next) => {
     }
 
       req.session.userId = user._id;
+      req.session.username = user.username;
       res.json({
         authenticated: true
       });
@@ -29,6 +30,7 @@ exports.registerUser = (req, res, next) => {
   User.create(userData)
     .then((user) => {
       req.session.userId = user._id;
+      req.session.username = user.username;
       res.json({
         registered: true
       });
