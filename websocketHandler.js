@@ -19,8 +19,9 @@ isClientRequestingHistory = message => {
 exports.websocketHandler = (sessionParser, server) => {
   const wss = new WebSocket.Server({ noServer: true });
   const broadcast = (event, data) => {
+    const msg = JSON.stringify({ event, data });
     wss.clients.forEach(client => {
-      client.send(JSON.stringify({ event, data }));
+      client.send(msg);
     });
   };
 
@@ -30,10 +31,10 @@ exports.websocketHandler = (sessionParser, server) => {
       username: req.session.username
     });
 
-    broadcast('USER_CONNECTED', connectedUsers);
+    broadcast('USER_CONNECTED', connectedUsers.map(({ username }) => username));
     ws.on('close', () => {
       connectedUsers = connectedUsers.filter(({userId})=> userId !== req.session.userId);
-      broadcast('USER_DISCONNECTED', connectedUsers);
+      broadcast('USER_DISCONNECTED', connectedUsers.map(({ username }) => username));
     });
 
     ws.on('message', incomingMessage => {

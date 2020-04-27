@@ -4,7 +4,7 @@ exports.isAuthenticated = (req, res, next) => {
     return next();
   }
 
-  res.status(401).json({
-    accessError: true
-  });
+  const error = new Error('Access Error.');
+  error.code = 401;
+  next(error);
 }

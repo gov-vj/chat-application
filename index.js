@@ -27,12 +27,16 @@ const wss = websocketHandler(sessionParser, server);
 app.use(sessionParser);
 app.use(bodyParser.json());
 app.use('/static', express.static(path.join(__dirname, 'public')));
-
+app.get('/', isAuthenticated, (req, res) => res.redirect('/chat'));
 app.get('/login', getLoginPage);
 app.post('/login', loginFormValidator, authenticateUser);
 app.post('/register', loginFormValidator, registerUser);
 app.get('/chat', isAuthenticated, getChatPage);
 app.use(function (err, req, res, next) {
+  if (err.code === 401) {
+    return res.redirect('/login');
+  }
+
   res.status(500).send('Server error');
 });
 

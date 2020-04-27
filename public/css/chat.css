@@ -1,0 +1,48 @@
+header {
+  border-bottom: black 1px solid;
+}
+
+header h3 {
+  margin: 0;
+}
+
+header a {
+  justify-self: end;
+}
+
+main {
+  margin-top: 1em;
+  display: grid;
+  grid-template-columns: 0.15fr 0.75fr 0.1fr;
+  grid-template-rows: 0.9fr 0.1fr;
+  height: 90vh;
+}
+
+main aside {
+  margin-left: 1em;
+  grid-row-start: span 2;
+  justify-self: center;
+  overflow-y: scroll;
+  width: 70%;
+  height: 90vh;
+}
+
+main .window {
+  grid-column-start: span 2;
+  padding-left: 1em;
+  align-self: end;
+  height: 80vh;
+  overflow-y: scroll;
+}
+
+main ul {
+  padding-left: 0;
+}
+
+main li {
+  margin-bottom: 0.5em;
+}
+
+.window span {
+  color: brown;
+}
