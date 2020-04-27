@@ -42,14 +42,26 @@ webSocket.onmessage = ({data}) => {
     case 'USER_DISCONNECTED':
       updateOnlineUsers(parsedData.data);
       break;
+    case 'RATE_LIMIT_EXCEED':
+      console.log(parsedData.dat); //Not showing in UI.
   }
 }
 
-sendButton.addEventListener('click', () => {
+function sendMessage() {
   webSocket.send(JSON.stringify({
     event: 'NEW_MESSAGE',
     data: inputElement.value
   }));
 
   inputElement.value = '';
+}
+
+inputElement.addEventListener('keypress', ev => {
+  if (ev.key === 'Enter') {
+    sendMessage();
+  }
+});
+
+sendButton.addEventListener('click', () => {
+  sendMessage();
 });

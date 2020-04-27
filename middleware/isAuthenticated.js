@@ -1,6 +1,5 @@
 exports.isAuthenticated = (req, res, next) => {
   if (req.session && req.session.userId) {
-    console.log(req.session);
     return next();
   }
 

@@ -3,6 +3,7 @@ const moongose = require('mongoose');
 const Chat = require('./models/chat');
 let connectedUsers = [];
 const historyLimit = 100;
+const rateLimitMap = new Map();
 
 isClientSendingChatData = message => {
   return message.event
@@ -14,6 +15,37 @@ isClientSendingChatData = message => {
 isClientRequestingHistory = message => {
   return message.event
       && message.event === 'REQ_HISTORY'
+};
+
+withinRateLimit = (user, current) => {
+  if (!rateLimitMap.has(user)) {
+    rateLimitMap.set(user, {
+      lastAccessed: current,
+      token: 2
+    });
+  }
+
+  let { lastAccessed, token } = rateLimitMap.get(user);
+  const timePassed = (current - lastAccessed) / 1000; // in seconds
+  token += timePassed * 0.2;
+  if (token > 2.0) {
+      token = 2.0; // throttle
+  }
+
+  let canProceed;
+  if (token < 1.0) {
+      canProceed = false;
+  } else {
+    canProceed = true;
+    token -= 1.0;
+  }
+
+  rateLimitMap.set(user, {
+    lastAccessed: current,
+    token
+  });
+
+  return canProceed;
 };
 
 exports.websocketHandler = (sessionParser, server) => {
@@ -38,6 +70,15 @@ exports.websocketHandler = (sessionParser, server) => {
     });
 
     ws.on('message', incomingMessage => {
+      if (!withinRateLimit(req.session.userId, +new Date())) {
+        ws.send(JSON.stringify({
+          event: 'RATE_LIMIT_EXCEED',
+          data: 'Only 2 request per 10 second is allowed. Please wait.'
+        }));
+
+        return;
+      }
+
       const parsedMessage = JSON.parse(incomingMessage);
       if (isClientSendingChatData(parsedMessage)) {
         const chat = new Chat({
